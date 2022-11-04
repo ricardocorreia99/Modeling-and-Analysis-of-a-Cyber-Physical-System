@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+urgent chan go_P,stop_P,go_S,stop_S,sensor_S,activate_sensor,desactivate_sensor;
+clock ck_P,ck,ck_car_P,ck_car_S;
+chan car_P,car_S,begin_S,return_P;
+int [0,1] sensor_on;
+</declaration>
+	<template>
+		<name x="5" y="5">semaforo_P</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-15945" y="-15333">
+			<name x="-15989" y="-15367">Inicio_P</name>
+			<committed/>
+		</location>
+		<location id="id1" x="-15793" y="-15334">
+			<name x="-15801" y="-15368">decision_P</name>
+			<committed/>
+		</location>
+		<location id="id2" x="-15614" y="-15453" color="#ffff00">
+			<name x="-15648" y="-15486">yellow_P</name>
+			<label kind="invariant" x="-15690" y="-15462">ck_P&lt;=5</label>
+		</location>
+		<location id="id3" x="-15470" y="-15452">
+			<name x="-15546" y="-15495">make_stop_cars_P</name>
+			<committed/>
+		</location>
+		<location id="id4" x="-15861" y="-15419" color="#00ff00">
+			<name x="-15886" y="-15453">green_P</name>
+			<label kind="invariant" x="-15844" y="-15436">ck_P&lt;=30</label>
+		</location>
+		<location id="id5" x="-15342" y="-15453" color="#ff0000">
+			<name x="-15367" y="-15436">red_P</name>
+			<committed/>
+		</location>
+		<location id="id6" x="-15206" y="-15453">
+			<name x="-15249" y="-15436">aguard_red_S</name>
+		</location>
+		<location id="id7" x="-15028" y="-15453" color="#ffa500">
+			<name x="-15079" y="-15435">red_to_green_P</name>
+			<label kind="invariant" x="-15053" y="-15486">ck_P&lt;=1</label>
+		</location>
+		<location id="id8" x="-15614" y="-15334">
+			<name x="-15597" y="-15351">des_sensor</name>
+			<committed/>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-15606" y="-15402">desactivate_sensor!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-15716" y="-15376">sensor_S?</label>
+			<label kind="assignment" x="-15708" y="-15359">ck_P:=0</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-15478" y="-15240">ck_P==1</label>
+			<label kind="assignment" x="-15478" y="-15223">ck_P:=0</label>
+			<nail x="-14943" y="-15453"/>
+			<nail x="-14943" y="-15249"/>
+			<nail x="-15946" y="-15249"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-15147" y="-15496">return_P?</label>
+			<label kind="assignment" x="-15147" y="-15479">ck_P:=0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-15308" y="-15479">begin_S!</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-15427" y="-15478">stop_P!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-15903" y="-15334">sensor_on==0</label>
+			<label kind="assignment" x="-15886" y="-15317">ck_P:=0</label>
+			<nail x="-15861" y="-15334"/>
+			<nail x="-15861" y="-15334"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-15818" y="-15402">ck_P==30</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-15946" y="-15402">go_P!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-15572" y="-15452">ck_P==5</label>
+			<label kind="assignment" x="-15572" y="-15435">ck_P:=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>semaforo_S</name>
+		<location id="id9" x="-952" y="-790">
+			<name x="-986" y="-824">initial_S</name>
+			<committed/>
+		</location>
+		<location id="id10" x="-790" y="-790" color="#ff0000">
+			<name x="-807" y="-824">red_S</name>
+		</location>
+		<location id="id11" x="-629" y="-790" color="#ffa500">
+			<name x="-671" y="-782">red_to_green_S</name>
+			<label kind="invariant" x="-654" y="-765">ck_P&lt;=1</label>
+		</location>
+		<location id="id12" x="-467" y="-790" color="#00ff00">
+			<name x="-535" y="-790">green_S</name>
+			<label kind="invariant" x="-477" y="-773">ck_P&lt;=30</label>
+		</location>
+		<location id="id13" x="-348" y="-790" color="#ffff00">
+			<name x="-358" y="-824">yellow_S</name>
+			<label kind="invariant" x="-358" y="-773">ck_P&lt;=5</label>
+		</location>
+		<location id="id14" x="-136" y="-790">
+			<name x="-146" y="-824">yellow_to_red_S</name>
+			<committed/>
+		</location>
+		<location id="id15" x="-867" y="-867">
+			<name x="-877" y="-901">ativar_sensor</name>
+			<committed/>
+		</location>
+		<location id="id16" x="-544" y="-867">
+			<name x="-586" y="-901">make_go_cars_S</name>
+			<committed/>
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-510" y="-850">go_S!</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-637" y="-867">ck_P==1</label>
+			<label kind="assignment" x="-637" y="-850">ck_P:=0</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-748" y="-901">begin_S?</label>
+			<label kind="assignment" x="-748" y="-884">ck_P:=0</label>
+			<nail x="-714" y="-867"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-875" y="-841">activate_sensor!</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-952" y="-850">stop_S!</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-595" y="-646">ck_P==0</label>
+			<label kind="synchronisation" x="-595" y="-629">return_P!</label>
+			<nail x="-102" y="-790"/>
+			<nail x="-102" y="-603"/>
+			<nail x="-952" y="-603"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-280" y="-833">ck_P==5</label>
+			<label kind="assignment" x="-280" y="-816">ck_P:=0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-442" y="-833">ck_P==30</label>
+			<label kind="assignment" x="-442" y="-816">ck_P:=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>road_P</name>
+		<location id="id17" x="-331" y="-51" color="#ff0000">
+			<name x="-374" y="-85">unavailable_P</name>
+		</location>
+		<location id="id18" x="-161" y="-51" color="#00ff00">
+			<name x="-144" y="-76">available_P</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-357" y="8">stop_P?</label>
+			<nail x="-383" y="0"/>
+			<nail x="-272" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-331" y="-178">stop_P?</label>
+			<nail x="-161" y="-153"/>
+			<nail x="-433" y="-153"/>
+			<nail x="-433" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-170" y="17">car_P?</label>
+			<nail x="-212" y="17"/>
+			<nail x="-85" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-272" y="-76">go_P?</label>
+		</transition>
+	</template>
+	<template>
+		<name>road_S</name>
+		<location id="id19" x="-1215" y="-1105" color="#ff0000">
+			<name x="-1326" y="-1122">unavailable_S</name>
+		</location>
+		<location id="id20" x="-1045" y="-1105" color="#00ff00">
+			<name x="-1028" y="-1122">available_S</name>
+		</location>
+		<init ref="id19"/>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-1164" y="-1207">stop_S?</label>
+			<nail x="-1045" y="-1181"/>
+			<nail x="-1215" y="-1181"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-1062" y="-1045">car_S?</label>
+			<nail x="-986" y="-1045"/>
+			<nail x="-1088" y="-1045"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-1232" y="-1045">stop_S?</label>
+			<nail x="-1275" y="-1045"/>
+			<nail x="-1130" y="-1045"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-1156" y="-1131">go_S?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Sensor_S</name>
+		<location id="id21" x="-527" y="-68">
+			<name x="-629" y="-76">desc_sensor</name>
+		</location>
+		<location id="id22" x="-348" y="-68">
+			<name x="-391" y="-59">act_sensor</name>
+		</location>
+		<location id="id23" x="-178" y="-68">
+			<name x="-188" y="-102">wait_to_pass</name>
+		</location>
+		<location id="id24" x="-348" y="17">
+			<name x="-390" y="25">send_sensor_signal</name>
+		</location>
+		<init ref="id21"/>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-535" y="-8">desactivate_sensor?</label>
+			<label kind="assignment" x="-510" y="-25">sensor_on=0</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-289" y="-17">sensor_S!</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-289" y="-93">car_S?</label>
+			<label kind="assignment" x="-304" y="-68">sensor_on=1</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-467" y="-93">activate_sensor?</label>
+		</transition>
+	</template>
+	<template>
+		<name>generate_car_P</name>
+		<location id="id25" x="-535" y="-76">
+			<name x="-637" y="-93">initial_GC_P</name>
+		</location>
+		<init ref="id25"/>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-450" y="-84">ck_car_P&gt;=2</label>
+			<label kind="synchronisation" x="-450" y="-101">car_P!</label>
+			<label kind="assignment" x="-450" y="-67">ck_car_P:=0</label>
+			<nail x="-459" y="0"/>
+			<nail x="-459" y="-135"/>
+		</transition>
+	</template>
+	<template>
+		<name>generate_car_S</name>
+		<location id="id26" x="-1589" y="-994">
+			<name x="-1691" y="-1002">initial_GC_S</name>
+		</location>
+		<init ref="id26"/>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id26"/>
+			<label kind="guard" x="-1479" y="-994">ck_car_S&gt;=15</label>
+			<label kind="synchronisation" x="-1479" y="-1011">car_S!</label>
+			<label kind="assignment" x="-1479" y="-977">ck_car_S:=0</label>
+			<nail x="-1489" y="-1045"/>
+			<nail x="-1489" y="-918"/>
+		</transition>
+	</template>
+	<system>
+system semaforo_P,road_P,road_S,Sensor_S,generate_car_P,generate_car_S,semaforo_S;
+    </system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt;(semaforo_S.green_S)
+</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;(semaforo_P.red_P)</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[](not deadlock)</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[](not(semaforo_P.green_P and semaforo_S.green_S))</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E[](not(semaforo_P.green_P and semaforo_S.green_S))</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>Sensor_S.wait_to_pass --&gt; (semaforo_S.green_S)
+</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>(semaforo_P.red_P) --&gt; (semaforo_P.green_P)</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[](not(road_P.available_P and road_S.available_S))</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[](not(road_S.unavailable_S and semaforo_S.green_S))</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
