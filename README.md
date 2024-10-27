@@ -1,2 +1,3 @@
-# Modelizacao-e-analise-de-um-sistema-ciber-fisico
-utilizando a ferramenta Uppal, fez-se o modelo e a análise de um sistema acerca do funcionamento de semáforos num cruzamento 
+#Modeling-and-Analysis-of-a-Cyber-Physical-System
+
+Using the Uppaal tool, we developed a model and performed an analysis of a traffic light system's operation at an intersection.
